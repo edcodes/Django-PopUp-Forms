@@ -1,9 +1,9 @@
 # Django-PopUp-Forms<br><br>
 
-Simple example of Django pop up forms.<br>
-django bootstrap modal forms<br>
-django bootstrap5<br>
-django crispy forms<br><br><br>
+Simple example Phone book app using generic view, bootstrap modal pop up forms, user authentication, mixins
+
+<br><br>
+
 
 **Make sure to install requirements.txt<br><br>
 **Add your ip to setting.py ( ALLOWED_HOSTS = [''] ) <br><br>
