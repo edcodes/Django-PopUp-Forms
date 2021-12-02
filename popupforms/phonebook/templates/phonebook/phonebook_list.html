@@ -1,0 +1,116 @@
+{% extends "design/base.html" %}
+{% load static %}
+
+{% block content %}
+	<h1>Phone Books</h1>
+	
+	<div class="container-fluid listview">
+	<div class="row m-1 ">
+			<div class="col-6 p-1">				
+				<a  href="/" title="Back" alt="Back">
+				<img class="float-left p-1" src="{% static 'icons/back.png' %}" width="32" title="Back" alt="Back">
+				</a>
+			</div>
+			<div class="col-6 p-1 d-flex justify-content-end">		
+				{% if perms.stones.add_phonebook %}
+				<img id="create-phonebook" class="pull-right p-1" src="{% static 'icons/add.png' %}" width="32" title="Add New" alt="Add New">
+				{% endif %}
+			</div>
+	</div>
+	
+	<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content"></div>
+	  </div>
+	</div>
+	
+	
+	
+	<div class="row m-2">
+			<div class="col-2 border rounded p-1">Name</div>
+			<div class="col-2 border rounded p-1">Phone</div>				
+			<div class="col-2 border rounded p-1">Email</div>
+			<div class="col-2 border rounded p-1">Address</div>
+			<div class="col-2 border rounded p-1">Note</div>
+			<div class="col-2  p-1">&nbsp;</div>
+	</div>        
+    {% for PhoneBook in PhoneBooks %}
+		<div class="row m-2">			
+			
+			<div class="col-2 border rounded p-1">
+				{{ PhoneBook.name }} {{ PhoneBook.last_name }}
+			</div>
+			<div class="col-2 border rounded p-1">
+			{% if PhoneBook.phone %}{{ PhoneBook.phone }}{% endif %}        
+			</div>	
+			<div class="col-2 border rounded p-1">
+			{% if PhoneBook.email %}{{ PhoneBook.email }}{% endif %}        
+			</div>	
+			<div class="col-2 border rounded p-1">
+			{% if PhoneBook.address %}{{ PhoneBook.address }}{% endif %}        
+			</div>	
+			<div class="col-2 border rounded p-1">
+			{% if PhoneBook.note %}{{ PhoneBook.note }}{% endif %}        
+			</div>	
+			<div class="col-2 border rounded p-1">	
+			{% if perms.stones.view_phonebook %}
+				<img data-form-url="{% url 'phonebook-detail-popup' PhoneBook.id %}" class="detail-phonebook float-left p-1" src="{% static 'icons/detail.png' %}" width="32" height="32" title="Detail" alt="Detail">
+			{% endif %}
+			{% if perms.stones.delete_phonebook %}
+				 <img data-form-url="{% url 'phonebook-delete-popup' PhoneBook.id %}" class="delete-phonebook float-right p-1" src="{% static 'icons/delete.png' %}" width="32" height="32" title="Delete" alt="Delete">
+			{% endif %}
+			{% if perms.stones.change_phonebook %}
+				<img data-form-url="{% url 'phonebook-update-popup' PhoneBook.id %}" class="update-phonebook float-right p-1" src="{% static 'icons/edit.png' %}" width="32" height="32" title="Edit" alt="Edit">
+			{% endif %}
+			</div>	
+		</div>        
+    {% endfor %}
+	</div>
+	{% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %}
+	
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+    $("#create-phonebook").modalForm({formURL: "{% url 'phonebook-create-popup' %}"});
+	
+	
+	$(".detail-phonebook").each(function () {
+        $(this).modalForm({formURL: $(this).data("form-url")});
+    });
+	
+
+	$(".update-phonebook").each(function () {
+        $(this).modalForm({formURL: $(this).data("form-url")});
+    });
+	
+	
+	$(".delete-phonebook").each(function () {
+        $(this).modalForm({formURL: $(this).data("form-url"), isDeleteForm: true});
+    });
+
+});
+</script>
+
+	
+{% endblock content %}
