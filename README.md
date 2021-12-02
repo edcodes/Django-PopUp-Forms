@@ -6,7 +6,7 @@ django bootstrap5<br>
 django crispy forms<br><br><br>
 
 **Make sure to install requirements.txt<br><br>
-**Add your ip to setting.py<br><br>
+**Add your ip to setting.py ( ALLOWED_HOSTS = [''] ) <br><br>
 
 pip install -r requirements.txt<br><br>
 
